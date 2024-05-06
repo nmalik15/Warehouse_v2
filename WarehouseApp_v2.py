@@ -24,6 +24,7 @@ def manage_balance():
         print("\nERROR! INVALID COMMAND. TRY AGAIN.")
 
 def record_sale():
+    """Record a sale."""
     global account_balance, inventory, operations
     product = input("Enter product name: ")
     if product in inventory:
@@ -43,6 +44,7 @@ def record_sale():
         print(f"{product} is not available in the inventory.")
 
 def record_purchase():
+    """Record a purchase."""
     global account_balance, inventory, operations
     product = input("Enter product name: ")
     price = float(input("Enter product price: "))
@@ -60,6 +62,7 @@ def record_purchase():
         print("ERROR! INSUFFICIENT BALANCE FOR THIS PURCHASE!")
 
 def display_account_balance():
+    """Display current account balance."""
     global account_balance
     print(f"\nCurrent account balance: {account_balance}")
 
@@ -69,6 +72,44 @@ def display_inventory():
     print("Warehouse Inventory:")
     for product, (quantity, price) in inventory.items():
         print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+
+def display_product_status():
+    """Display product status in warehouse."""
+    global inventory
+    product = input("Enter product name: ")
+    if product in inventory:
+        quantity, price = inventory[product]
+        print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+    else:
+        print(f"Error! {product} is not in the warehouse.".upper())
+
+def review_operations():
+    """Review recorded operations."""
+    global operations
+    start = input("Enter starting index (leave blank to start from the beginning): ")
+    end = input("Enter ending index (leave blank to go until the end): ")
+    if not start:
+        start = 0
+    else:
+        start = int(start)
+    if not end:
+        end = len(operations)
+    else:
+        end = int(end)
+    if start < 0 or end > len(operations) or start >= end:
+        print("Invalid range.")
+    else:
+        for i in range(start, end):
+            operation, details = operations[i]
+            if operation == "Balance":
+                amount = details
+                print(f"{i+1}. Balance changed by {amount}")
+            elif operation == "Sale":
+                product, quantity, price, total_sale = details
+                print(f"{i+1}. Sold {quantity} units of {product} for {total_sale}")
+            elif operation == "Purchase":
+                product, quantity, price, total_cost = details
+                print(f"{i+1}. Purchased {quantity} units of {product} for {total_cost}")
 
 # Main program loop
 while True:
@@ -101,38 +142,10 @@ while True:
         display_inventory()
 
     elif command == "6":
-        product = input("Enter product name: ")
-        if product in inventory:
-            # quantity = inventory[product]
-            print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
-        else:
-            print(f"Error! {product} is not in the warehouse.".upper())
+        display_product_status()
 
     elif command == "7":
-        start = input("Enter starting index (leave blank to start from the beginning): ")
-        end = input("Enter ending index (leave blank to go until the end): ")
-        if not start:
-            start = 0
-        else:
-            start = int(start)
-        if not end:
-            end = len(operations)
-        else:
-            end = int(end)
-        if start < 0 or end > len(operations) or start >= end:
-            print("Invalid range.")
-        else:
-            for i in range(start, end):
-                operation, details = operations[i]
-                if operation == "Balance":
-                    amount = details
-                    print(f"{i+1}. Balance changed by {amount}")
-                elif operation == "Sale":
-                    product, quantity, price, total_sale = details
-                    print(f"{i+1}. Sold {quantity} units of {product} for {total_sale}")
-                elif operation == "Purchase":
-                    product, quantity, price, total_cost = details
-                    print(f"{i+1}. Purchased {quantity} units of {product} for {total_cost}")
+        review_operations()
 
     elif command == "8":
         print("Terminating program...")
