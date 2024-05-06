@@ -23,6 +23,25 @@ def manage_balance():
     else:
         print("\nERROR! INVALID COMMAND. TRY AGAIN.")
 
+def record_sale():
+    global account_balance, inventory, operations
+    product = input("Enter product name: ")
+    if product in inventory:
+        price = inventory[product][1]
+        quantity = int(input("Enter product quantity: "))
+        if quantity <= inventory[product][0]:
+            total_sale = price * quantity
+            account_balance += total_sale
+            inventory[product] = (inventory[product][0] - quantity, price)
+            if inventory[product][0] == 0:
+                del inventory[product]
+            operations.append(("Sale", (product, quantity, price, total_sale)))
+            print(f"Sale recorded. New account balance: {account_balance}")
+        else:
+            print(f"Insufficient quantity of {product} in the inventory.")
+    else:
+        print(f"{product} is not available in the inventory.")
+
 def record_purchase():
     global account_balance, inventory, operations
     product = input("Enter product name: ")
@@ -59,22 +78,7 @@ while True:
         manage_balance()
             
     elif command == "2":
-        product = input("Enter product name: ")
-        if product in inventory:
-            price = inventory[product][1]
-            quantity = int(input("Enter product quantity: "))
-            if quantity <= inventory[product][0]:
-                total_sale = price * quantity
-                account_balance += total_sale
-                inventory[product] = (inventory[product][0] - quantity, price)
-                if inventory[product][0] == 0:
-                    del inventory[product]
-                operations.append(("Sale", (product, quantity, price, total_sale)))
-                print(f"Sale recorded. New account balance: {account_balance}")
-            else:
-                print(f"Insufficient quantity of {product} in the inventory.")
-        else:
-            print(f"{product} is not available in the inventory.")
+        record_sale()
 
     elif command == "3":
         record_purchase()
