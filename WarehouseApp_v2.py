@@ -59,6 +59,17 @@ def record_purchase():
     else:
         print("ERROR! INSUFFICIENT BALANCE FOR THIS PURCHASE!")
 
+def display_account_balance():
+    global account_balance
+    print(f"\nCurrent account balance: {account_balance}")
+
+def display_inventory():
+    """Display warehouse inventory."""
+    global inventory
+    print("Warehouse Inventory:")
+    for product, (quantity, price) in inventory.items():
+        print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+
 # Main program loop
 while True:
     print("\n*** >>  WAREHOUSE ACCOUNTING << ***")
@@ -84,12 +95,10 @@ while True:
         record_purchase()
 
     elif command == "4":
-        print(f"\nCurrent account balance: {account_balance}")
+        display_account_balance()
 
     elif command == "5":
-        print("Warehouse Inventory:")
-        for product, (quantity, price) in inventory.items():
-            print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+        display_inventory()
 
     elif command == "6":
         product = input("Enter product name: ")
