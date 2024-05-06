@@ -1,7 +1,18 @@
+import os
+
 # Initialize account balance and warehouse inventory
 account_balance = 0
 inventory = {}
 operations = []
+
+def clear_screen():
+    if (os.name) == "nt":
+        os.system('cls')
+    else:
+        os.system('clear')
+
+def key_press():
+    input("Press ENTER to continue...")
 
 def manage_balance():
     """Add or subtract amount from account balance."""
@@ -15,13 +26,18 @@ def manage_balance():
         account_balance += amount
         operations.append(("Balance", amount))
         print(f"\nNEW ACCOUNT BALANCE: {account_balance}")
+        key_press()
     elif choice == "2":
         amount = float(input("Please enter amount to subtract from account balance: "))
         account_balance -= amount
         operations.append(("Balance", -amount))
         print(f"\nNEW ACCOUNT BALANCE: {account_balance}")
+        key_press()
+
     else:
         print("\nERROR! INVALID COMMAND. TRY AGAIN.")
+        key_press()
+
 
 def record_sale():
     """Record a sale."""
@@ -38,10 +54,13 @@ def record_sale():
                 del inventory[product]
             operations.append(("Sale", (product, quantity, price, total_sale)))
             print(f"Sale recorded. New account balance: {account_balance}")
+            key_press()
         else:
             print(f"Insufficient quantity of {product} in the inventory.")
+            key_press()
     else:
         print(f"{product} is not available in the inventory.")
+        key_press()
 
 def record_purchase():
     """Record a purchase."""
@@ -58,13 +77,16 @@ def record_purchase():
             inventory[product] = (quantity, price)
         operations.append(("Purchase", (product, quantity, price, total_cost)))
         print(f"Purchase recorded. New account balance: {account_balance}")
+        key_press()
     else:
         print("ERROR! INSUFFICIENT BALANCE FOR THIS PURCHASE!")
+        key_press()
 
 def display_account_balance():
     """Display current account balance."""
     global account_balance
     print(f"\nCurrent account balance: {account_balance}")
+    key_press()
 
 def display_inventory():
     """Display warehouse inventory."""
@@ -72,6 +94,7 @@ def display_inventory():
     print("Warehouse Inventory:")
     for product, (quantity, price) in inventory.items():
         print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+    key_press()
 
 def display_product_status():
     """Display product status in warehouse."""
@@ -80,8 +103,10 @@ def display_product_status():
     if product in inventory:
         quantity, price = inventory[product]
         print(f"{product}:\n\tStock: {quantity} \n\tPrice: {price}")
+        key_press()
     else:
         print(f"Error! {product} is not in the warehouse.".upper())
+        key_press()
 
 def review_operations():
     """Review recorded operations."""
@@ -98,6 +123,7 @@ def review_operations():
         end = int(end)
     if start < 0 or end > len(operations) or start >= end:
         print("Invalid range.")
+        key_press()
     else:
         for i in range(start, end):
             operation, details = operations[i]
@@ -110,10 +136,12 @@ def review_operations():
             elif operation == "Purchase":
                 product, quantity, price, total_cost = details
                 print(f"{i+1}. Purchased {quantity} units of {product} for {total_cost}")
+        key_press()
 
 # Main program loop
 while True:
-    print("\n*** >>  WAREHOUSE ACCOUNTING << ***")
+    clear_screen()
+    print("*** >>  WAREHOUSE ACCOUNTING << ***")
     print("\nPlease select the number for action:")
     print("\t1. Balance - Add or subtract amount from account")
     print("\t2. Sale - Record a sale")
